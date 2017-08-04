@@ -42,13 +42,31 @@ $.ajax({
 
 
 }).fail(function(err) {
-  throw err;
+    console.log("error");
+ throw err;
 });
 
 
 
     $nytHeaderElem.text('New York Times Articles About ' + cityStr);
 
+ var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' +cityStr+ '&format=json&callback=wikiCallbackFunction';
+
+            $.ajax(wikiUrl, {
+                dataType: "jsonp",
+                success: function(response) {
+                var articleList = response[1];
+                    for (var i=0; i<articleList.length; i++){
+                    var articleStr = articleList[i];
+
+                        console.log(articleStr);
+                    var url = 'http://en.wikipedia.org/wiki/' +articleStr;
+                        $wikiElem.append('<li><a href="'+url+'">'+articleStr+'</a></li>');
+
+                    }
+
+                }
+            });
 
 
     return false;
